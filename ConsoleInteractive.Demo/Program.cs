@@ -1,12 +1,18 @@
 ﻿using System;
+using System.CommandLine;
+using System.Threading.Tasks;
 
 namespace ConsoleInteractive.Demo
 {
     class Program
     {
-        static void Main(string[] args)
+        static Task<int> Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var cmd = new RootCommand("") {
+                BufferDemo.BuildBufferCommand(),
+            };
+
+            return cmd.InvokeAsync(args);
         }
     }
 }
