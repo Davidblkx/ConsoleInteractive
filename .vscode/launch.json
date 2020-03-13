@@ -5,16 +5,16 @@
    "version": "0.2.0",
    "configurations": [
         {
-            "name": ".NET Core Launch (console)",
+            "name": "Debug DEMO",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/ConsoleInteractive.Demo/bin/Debug/netcoreapp3.1/ConsoleInteractive.Demo.dll",
-            "args": [],
+            "args": ["q"],
             "cwd": "${workspaceFolder}/ConsoleInteractive.Demo",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
-            "console": "internalConsole",
+            "console": "integratedTerminal",
             "stopAtEntry": false
         },
         {

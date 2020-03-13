@@ -42,7 +42,7 @@ namespace ConsoleInteractive
 
             Console.SetCursorPosition(x, y);
             var spaceCount = CalculateConsoleSpaces((x, y), (xTarget, yTarget));
-            Console.Write(new string(' ', spaceCount));
+            Console.Write(new string(value, spaceCount));
         }
 
         /// <summary>
