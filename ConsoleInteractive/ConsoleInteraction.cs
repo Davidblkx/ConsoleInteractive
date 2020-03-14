@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System;
-using System.Collections.Generic;
 using ConsoleInteractive.Question;
+using ConsoleInteractive.Question.Validators;
 
 namespace ConsoleInteractive
 {
@@ -20,7 +20,7 @@ namespace ConsoleInteractive
         public static Task<T> AskQuestion<T>(
             string questionMessage,
             T defaultValue,
-            IEnumerable<Func<string, Task<(bool success, string? message)>>> validators
+            IQuestionValidators<T> validators
         ) {
             return QuestionFactoryProvider
                 .GetQuestionFactory<T>()

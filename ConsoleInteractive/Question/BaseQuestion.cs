@@ -1,6 +1,6 @@
-using System.Threading.Tasks;
 using System;
-using System.Collections.Generic;
+using ConsoleInteractive.Question.Validators;
+
 namespace ConsoleInteractive.Question
 {
     /// <summary>
@@ -25,10 +25,7 @@ namespace ConsoleInteractive.Question
         /// <param name="success">true, if passed with success</param>
         /// <param name="message">message to alert user of error</param>
         /// <returns></returns>
-        public IEnumerable<Func<string, Task<(bool success, string? message)>>> Validators => _validators;
-            
-        private readonly List<Func<string, Task<(bool success, string? message)>>> _validators = 
-            new List<Func<string, Task<(bool success, string? message)>>>();
+        public QuestionValidators<T> Validators => QuestionValidators<T>.FromEmpty();
 
         /// <summary>
         /// Value type
@@ -40,24 +37,6 @@ namespace ConsoleInteractive.Question
         public BaseQuestion(string questionMessage, T defaultValue) {
             QuestionMessage = questionMessage;
             DefaultValue = defaultValue;
-        }
-
-        /// <summary>
-        /// Add new validator
-        /// </summary>
-        /// <param name="success"></param>
-        /// <param name="message"></param>
-        public void AddValidator(Func<string, Task<(bool success, string? message)>> validator) {
-            _validators.Add(validator);
-        }
-
-        /// <summary>
-        /// Add multiple validators
-        /// </summary>
-        /// <param name="success"></param>
-        /// <param name="message"></param>
-        public void AddValidators(IEnumerable<Func<string, Task<(bool success, string? message)>>> validators) {
-            _validators.AddRange(validators);
         }
 
         /// <summary>

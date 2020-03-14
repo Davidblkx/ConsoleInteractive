@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ConsoleInteractive.Question.Validators;
 
 namespace ConsoleInteractive.Question.Formats
 {
@@ -18,11 +19,9 @@ namespace ConsoleInteractive.Question.Formats
         /// <param name="success"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public static StringQuestion FromValidators(
-            IEnumerable<Func<string, Task<(bool success, string? message)>>> validators
-        ) {
+        public static StringQuestion FromValidators(QuestionValidators<string> validators) {
             var q = new StringQuestion();
-            q.AddValidators(validators);
+            q.Validators.AddRange(validators);
             return q;
         }
     }

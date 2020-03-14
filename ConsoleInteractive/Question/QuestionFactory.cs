@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ConsoleInteractive.Question.Validators;
 
 namespace ConsoleInteractive.Question
 {
@@ -47,7 +48,7 @@ namespace ConsoleInteractive.Question
         public async Task<T> AskQuestion(
             string question, 
             T defaultValue,
-            IEnumerable<Func<string, Task<(bool success, string? message)>>> validators
+            IQuestionValidators<T> validators
         ) {
             // Buffer name to memorize
             const string BUFFER_NAME = "#QUESTION#";
@@ -67,14 +68,15 @@ namespace ConsoleInteractive.Question
                     if (string.IsNullOrEmpty(res)) 
                     { res = _question.ConvertToString(defaultValue); }
 
+                    // Convert to Type [T]
+                    var data = _question.ConvertFromString(res);
+
                     // Run all validators
                     foreach (var fn in validators) {
-                        var (success, message) = await fn(res);
+                        var (success, message) = await fn(data);
                         if (!success) { throw new Exception(message ?? "Validator failed"); }
                     }
 
-                    // Convert to Type [T]
-                    return _question.ConvertFromString(res);
                 } catch (Exception e) { // Catch all exceptions
                     // Write to console
                     Console.WriteLine(e.Message + ",\nPress [Return] to retry...");
