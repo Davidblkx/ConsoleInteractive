@@ -20,6 +20,13 @@ namespace ConsoleInteractive.Tests.Question
             RegisterDefaultProviders();
 
             Assert.NotNull(TryGetQuestionFactory<string>());
+            Assert.NotNull(TryGetQuestionFactory<long>());
+            Assert.NotNull(TryGetQuestionFactory<int>());
+            Assert.NotNull(TryGetQuestionFactory<double>());
+            Assert.NotNull(TryGetQuestionFactory<float>());
+            Assert.NotNull(TryGetQuestionFactory<decimal>());
+            Assert.NotNull(TryGetQuestionFactory<ulong>());
+            Assert.NotNull(TryGetQuestionFactory<uint>());
         }
 
         [Fact]

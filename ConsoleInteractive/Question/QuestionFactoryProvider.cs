@@ -59,6 +59,13 @@ namespace ConsoleInteractive.Question
         /// </summary>
         public static void RegisterDefaultProviders() {
             RegisterQuestionFormat(new StringQuestion());
+            RegisterQuestionFormat(new LongQuestion());
+            RegisterQuestionFormat(new IntQuestion());
+            RegisterQuestionFormat(new ULongQuestion());
+            RegisterQuestionFormat(new UIntQuestion());
+            RegisterQuestionFormat(new DoubleQuestion());
+            RegisterQuestionFormat(new FloatQuestion());
+            RegisterQuestionFormat(new DecimalQuestion());
         }
     }
 }

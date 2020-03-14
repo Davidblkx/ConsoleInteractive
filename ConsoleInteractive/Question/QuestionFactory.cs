@@ -77,6 +77,9 @@ namespace ConsoleInteractive.Question
                         if (!success) { throw new Exception(message ?? "Validator failed"); }
                     }
 
+                    // return converted input
+                    return data;
+
                 } catch (Exception e) { // Catch all exceptions
                     // Write to console
                     Console.WriteLine(e.Message + ",\nPress [Return] to retry...");
