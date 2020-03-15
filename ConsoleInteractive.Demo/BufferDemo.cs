@@ -26,11 +26,15 @@ namespace ConsoleInteractive.Demo
 
             do { // read inputs until keyword is match
 
-            var res = Console.ReadLine();
+                var res = Console.ReadLine();
 
-            // if clear is found, replace buffer
-            if (res == token) { ClearBufferFrom("BATATAS"); }
-            if (res == "exit") { return; }
+                // if clear is found, replace buffer
+                if (res == token) { ClearBufferFrom("BATATAS"); }
+                if (res == "exit") { 
+                    if (ConsoleI.AskConfirmation("Are you sure you wan't to leave")) {
+                        return;
+                    }
+                }
 
             } while(true);
         }

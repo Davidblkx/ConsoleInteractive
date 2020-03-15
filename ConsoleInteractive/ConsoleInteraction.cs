@@ -31,6 +31,28 @@ namespace ConsoleInteractive
         }
 
         /// <summary>
+        /// Ask for confirmation, user must press 1 of the keys
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="okKey"></param>
+        /// <param name="koKey"></param>
+        /// <returns></returns>
+        public static bool AskConfirmation(string message, ConsoleKey okKey = ConsoleKey.Y, ConsoleKey koKey = ConsoleKey.N) {
+            const string BUFFER_KEY = "INTERNAL_BUFFER#CONFIRMATION";
+
+            ConsoleBuffer.MemoriseBufferPosition(BUFFER_KEY);
+
+            do {
+                Console.WriteLine($"{message}? [{okKey}/{koKey}]");
+                var key = Console.ReadKey();
+
+                if (key.Key == okKey) { return true; }
+                if (key.Key == koKey) { return false; }
+                ConsoleBuffer.ClearBufferFrom(BUFFER_KEY);
+            } while(true);
+        }
+
+        /// <summary>
         /// Ask a question and validate response
         /// </summary>
         /// <param name="questionMessage">message in question</param>
