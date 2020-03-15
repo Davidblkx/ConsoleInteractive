@@ -12,7 +12,8 @@ namespace ConsoleInteractive.Demo
 
             var cmd = new RootCommand("") {
                 BufferDemo.BuildBufferCommand(),
-                QuestionDemo.BuildQuestionCommand()
+                QuestionDemo.BuildQuestionCommand(),
+                SelectionDemo.BuildSelectionCommand()
             };
 
             return cmd.InvokeAsync(args);

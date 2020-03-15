@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 
 namespace ConsoleInteractive.Question.Validators
 {
-    public interface IQuestionValidators<T> : IEnumerable<Func<T, Task<(bool, string?)>>>, IEnumerable { }
+    public interface IQuestionValidators<T> : IEnumerable<Func<T, Task<(bool, string?)>>>, IEnumerable {
+        public Func<T, Task<(bool, string?)>> this[int index] { get; }
+    }
 
     /// <summary>
     /// List of validators for [T]
@@ -15,6 +17,8 @@ namespace ConsoleInteractive.Question.Validators
     {
         private readonly List<Func<T, Task<(bool, string?)>>> _items =
             new List<Func<T, Task<(bool, string?)>>>();
+
+        public Func<T, Task<(bool, string?)>> this[int index] => _items[index];
 
         /// <summary>
         /// Add a validator to the end

@@ -1,7 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using System;
 using ConsoleInteractive.Question;
 using ConsoleInteractive.Question.Validators;
+using ConsoleInteractive.Selection;
+using System.Collections.Generic;
 
 namespace ConsoleInteractive
 {
@@ -37,6 +40,45 @@ namespace ConsoleInteractive
             return QuestionFactoryProvider
                 .GetQuestionFactory<T>()
                 .AskQuestion(questionMessage, defaultValue);
+        }
+
+        /// <summary>
+        /// Select item from a group of options
+        /// </summary>
+        /// <param name="group">collection of options</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static T Select<T>(SelectionGroup<T> group) {
+            return SelectionGroup.Select(group, 1).First();
+        }
+
+        /// <summary>
+        /// Select items from a group of options
+        /// </summary>
+        /// <param name="group">collection of options</param>
+        /// <param name="max">max allowed selections</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IEnumerable<T> Select<T>(SelectionGroup<T> group, int max) {
+            return SelectionGroup.Select(group, max);
+        }
+
+        /// <summary>
+        /// Select a item from an enum
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static T Select<T>() where T : Enum {
+            return SelectionGroup.Select(SelectionGroup.FromEnum<T>()).First();
+        }
+
+        /// <summary>
+        /// Select a items from an enum
+        /// </summary>
+        /// <param name="max">max allowed selections</param>
+        /// <returns></returns>
+        public static IEnumerable<T> Select<T>(int max) where T : struct, Enum {
+            return SelectionGroup.Select(SelectionGroup.FromEnum<T>(), max);
         }
 
         /// <summary>
