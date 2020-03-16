@@ -4,6 +4,7 @@ using System;
 using ConsoleInteractive.Question;
 using ConsoleInteractive.Question.Validators;
 using ConsoleInteractive.Selection;
+using ConsoleInteractive.Forms;
 using System.Collections.Generic;
 
 namespace ConsoleInteractive
@@ -28,6 +29,14 @@ namespace ConsoleInteractive
             return QuestionFactoryProvider
                 .GetQuestionFactory<T>()
                 .AskQuestion(questionMessage, defaultValue, validators);
+        }
+
+        /// <summary>
+        /// Build and request properties from object
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public static Task<T> RequestForm<T>() where T : class, new() {
+            return FormBuilder.RequestForm<T>();
         }
 
         /// <summary>

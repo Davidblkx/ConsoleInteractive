@@ -9,7 +9,7 @@ namespace ConsoleInteractive.Question
     /// </summary>
     public static class QuestionFactoryProvider
     {
-        private static readonly Dictionary<Type, Object> _factories = 
+        private static readonly Dictionary<Type, object> _factories = 
             new Dictionary<Type, object>();
 
         /// <summary>
@@ -55,6 +55,20 @@ namespace ConsoleInteractive.Question
         }
 
         /// <summary>
+        /// Get factory for a type, throws if not found
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IQuestionFactory GetQuestionFactory(Type type) {
+            if (
+                !_factories.ContainsKey(type) ||
+                !(_factories[type] is IQuestionFactory f)
+            ) { throw new Exception("Provider not found for type " + type.ToString()); }
+            
+            return f;
+        }
+
+        /// <summary>
         /// Load build in providers
         /// </summary>
         public static void RegisterDefaultProviders() {
@@ -66,6 +80,14 @@ namespace ConsoleInteractive.Question
             RegisterQuestionFormat(new DoubleQuestion());
             RegisterQuestionFormat(new FloatQuestion());
             RegisterQuestionFormat(new DecimalQuestion());
+            RegisterQuestionFormat(new ListQuestion<string>());
+            RegisterQuestionFormat(new ListQuestion<long>());
+            RegisterQuestionFormat(new ListQuestion<int>());
+            RegisterQuestionFormat(new ListQuestion<ulong>());
+            RegisterQuestionFormat(new ListQuestion<uint>());
+            RegisterQuestionFormat(new ListQuestion<double>());
+            RegisterQuestionFormat(new ListQuestion<float>());
+            RegisterQuestionFormat(new ListQuestion<decimal>());
         }
     }
 }

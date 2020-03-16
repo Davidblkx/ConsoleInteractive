@@ -1,13 +1,21 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using ConsoleInteractive.Question.Validators;
 
 namespace ConsoleInteractive.Question
 {
-    public class QuestionFactory<T>
+    public interface IQuestionFactory
+    {
+        IBaseQuestion Question { get; }
+        Task<object?> AskQuestion(string question, object? defaultValue, IQuestionValidators validators);
+    }
+
+    public class QuestionFactory<T> : IQuestionFactory
     {
         private readonly BaseQuestion<T> _question;
+
+        public BaseQuestion<T> Question => _question;
+        IBaseQuestion IQuestionFactory.Question => _question;
 
         private QuestionFactory(BaseQuestion<T> question) {
             _question = question;
@@ -101,6 +109,12 @@ namespace ConsoleInteractive.Question
             var defVal = _question.ConvertToString(defaultValue);
             var defValToShow = string.IsNullOrEmpty(defVal) ? "" : $"({defVal})";
            return $"{question}? {defValToShow}";
+        }
+
+        public async Task<object?> AskQuestion(string question, object? defaultValue, IQuestionValidators validators)
+        {
+            var defValue = defaultValue is null ? default : (T)defaultValue;
+            return await AskQuestion(question, defValue!, (IQuestionValidators<T>)validators);
         }
     }
 }

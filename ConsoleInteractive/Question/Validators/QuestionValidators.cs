@@ -5,6 +5,11 @@ using System.Threading.Tasks;
 
 namespace ConsoleInteractive.Question.Validators
 {
+    public interface IQuestionValidators : IEnumerable {
+        public Func<object, Task<(bool, string?)>> this[int index] { get; }
+        public IQuestionValidators Merge(IQuestionValidators? validators);
+    }
+
     public interface IQuestionValidators<T> : IEnumerable<Func<T, Task<(bool, string?)>>>, IEnumerable {
         public Func<T, Task<(bool, string?)>> this[int index] { get; }
     }
@@ -13,10 +18,15 @@ namespace ConsoleInteractive.Question.Validators
     /// List of validators for [T]
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class QuestionValidators<T> :  IQuestionValidators<T>
+    public class QuestionValidators<T> :  IQuestionValidators<T>, IQuestionValidators
     {
         private readonly List<Func<T, Task<(bool, string?)>>> _items =
             new List<Func<T, Task<(bool, string?)>>>();
+
+        Func<object, Task<(bool, string?)>> IQuestionValidators.this[int index] { get {
+            var fn = _items[index];
+            return (object e) => fn((T)e);
+        }}
 
         public Func<T, Task<(bool, string?)>> this[int index] => _items[index];
 
@@ -83,6 +93,17 @@ namespace ConsoleInteractive.Question.Validators
         /// <returns></returns>
         private Func<T, Task<(bool, string?)>> ConvertToAsync(Func<T, (bool, string?)> validator) {
             return (T e) => Task.Run(() => validator(e));
+        }
+
+        public IQuestionValidators Merge(IQuestionValidators? validators)
+        {
+            if (validators is null) return this;
+
+            foreach (var v in validators) {
+                if (v is Func<T, Task<(bool, string?)>> f) { Add(f); }
+            }
+
+            return this;
         }
     }
 }
