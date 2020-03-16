@@ -31,7 +31,7 @@ namespace ConsoleInteractive.Demo
                 // if clear is found, replace buffer
                 if (res == token) { ClearBufferFrom("BATATAS"); }
                 if (res == "exit") { 
-                    if (ConsoleI.AskConfirmation("Are you sure you wan't to leave")) {
+                    if (ConsoleI.AskConfirmation("Are you sure you want to leave")) {
                         return;
                     }
                 }

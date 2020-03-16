@@ -1,0 +1,16 @@
+site_name: Console Interactive
+repo_url: https://github.com/Davidblkx/ConsoleInteractive
+nav:
+  - Home: index.md
+  - ConsoleI: console-i.md
+  - Questions:
+    - BaseQuestion: question/base-question.md
+    - QuestionFactory: question/question-factory.md
+    - QuestionFactoryProvider: question/question-factory-provider.md
+  - Selection:
+    - SelectionOption: selection/selection-option.md
+    - SelectionGroup: selection/selection-group.md
+theme:
+  name: mkdocs
+extra_css:
+  - extra-styles.css
