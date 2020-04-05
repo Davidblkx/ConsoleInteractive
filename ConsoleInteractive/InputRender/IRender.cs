@@ -11,7 +11,7 @@ namespace ConsoleInteractive.InputRender
         /// Render data and request input
         /// </summary>
         /// <returns></returns>
-        Task<object> Request();
+        Task<object?> RequestInput();
     }
 
     /// <summary>
@@ -23,6 +23,6 @@ namespace ConsoleInteractive.InputRender
         /// Render data and request input
         /// </summary>
         /// <returns></returns>
-        new Task<T> Request();
+        new Task<T> RequestInput();
     }
 }

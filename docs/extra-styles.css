@@ -1,8 +1,0 @@
-@font-face {
-    font-family: 'FiraCode'; /*a name to be used later*/
-    src: url('/FiraCode-Regular.ttf'); /*URL to font*/
-}
-
-html, body {
-    font-family: 'FiraCode', Arial, Helvetica, sans-serif;
-}

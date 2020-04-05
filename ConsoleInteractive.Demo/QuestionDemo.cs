@@ -2,9 +2,8 @@ using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Threading.Tasks;
-using ConsoleInteractive.Question.Validators;
-using ConsoleInteractive.Question.Validators.String;
-using ConsoleInteractive.Question.Validators.Comparable;
+using ConsoleInteractive.Components.Factory;
+using ConsoleInteractive.InputValidation;
 
 namespace ConsoleInteractive.Demo
 {
@@ -23,33 +22,25 @@ namespace ConsoleInteractive.Demo
         public static async Task StartDemo() {
             const string NAME = "#BUFFER_QUESTION#";
             ConsoleBuffer.MemoriseBufferPosition(NAME);
-            
-            var strQ = await ConsoleI.AskQuestion<string>("Simple string question");
+
+            var inputText = InputTextFactory.Create<string>("Write something");
+            var strQ = await inputText.RequestInput();
             Console.WriteLine("String response => " + strQ);
             ConsoleI.AwaitContinue();
             ConsoleBuffer.ClearBufferFrom(NAME);
 
-            var intQ = await ConsoleI.AskQuestion("Ask for a number", 100);
-            Console.WriteLine("Number response => " + intQ);
+            var inputNum = InputTextFactory.Create("Write a number", 10L);
+            var numQ = await inputNum.RequestInput();
+            Console.WriteLine("String response => " + numQ);
             ConsoleI.AwaitContinue();
             ConsoleBuffer.ClearBufferFrom(NAME);
 
-            var validators = QuestionValidators<string>
-                .FromEmpty()
-                .AddMinLength(2)
-                .AddMaxLength(5);
-
-            strQ = await ConsoleI.AskQuestion("Validate input length >= 2 and <= 5", "", validators);
-            Console.WriteLine("String response => " + strQ);
-            ConsoleI.AwaitContinue();
-            ConsoleBuffer.ClearBufferFrom(NAME);
-
-            var intValidators = QuestionValidators<int>
-                .FromEmpty()
-                .GreaterThan(200)
-                .LessThanOrEqual(250);
-            intQ = await ConsoleI.AskQuestion("Ask for a number between 201 and 250", 100, intValidators);
-            Console.WriteLine("Number response => " + intQ);
+            var validatorMinMax = ValidatorCollection.Create<int>()
+                .Add(l => (l > 10, "Value must be higher than 10"))
+                .Add(l => (l < 50, "Value must be less than 50"));
+            var inputInt = InputTextFactory.Create("Write a number between 10 and 50", 0, validatorMinMax);
+            var intQ = await inputInt.RequestInput();
+            Console.WriteLine("String response => " + intQ);
             ConsoleI.AwaitContinue();
             ConsoleBuffer.ClearBufferFrom(NAME);
         }

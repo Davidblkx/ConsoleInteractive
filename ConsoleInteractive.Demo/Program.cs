@@ -1,6 +1,5 @@
 ﻿using System.CommandLine;
 using System.Threading.Tasks;
-using ConsoleInteractive.Question;
 
 namespace ConsoleInteractive.Demo
 {
@@ -8,8 +7,6 @@ namespace ConsoleInteractive.Demo
     {
         static Task<int> Main(string[] args)
         {
-            QuestionFactoryProvider.RegisterDefaultProviders();
-
             var cmd = new RootCommand("") {
                 BufferDemo.BuildBufferCommand(),
                 QuestionDemo.BuildQuestionCommand(),

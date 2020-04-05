@@ -1,3 +1,4 @@
+using System.Linq;
 using System;
 
 namespace ConsoleInteractive.InputConverter
@@ -7,6 +8,8 @@ namespace ConsoleInteractive.InputConverter
     /// </summary>
     public static class StringConverterFactory
     {
+        private static readonly string THROW_MESSAGE = "Can't create converter from type";
+
         /// <summary>
         /// Create IStringConverter for type [T]
         /// </summary>
@@ -16,17 +19,18 @@ namespace ConsoleInteractive.InputConverter
         public static IStringConverter<T> Create<T>(StringConverterProvider? provider = default) {
             if ((provider ?? StringConverterProvider.Global)
                 .TryGetConverter<T>(out var c1)) return c1;
-
-            var instance = Activator.CreateInstance<T>();
-
-            if (instance is IStringConverter<T> c2) return c2;
-            if (instance is IConvertible)
+                
+            if (Implements(typeof(T), typeof(IStringConverter<T>))) {
+                var instance = Activator.CreateInstance<T>();
+                if (instance is IStringConverter<T> c2) return c2;
+            } else if (Implements(typeof(T), typeof(IConvertible))) {
                 return new StringConverter<T>(
                     e => Convert.ToString(e),
                     e => (T)Convert.ChangeType(e, typeof(T))
                 );
+            }
 
-            throw new Exception("Can't create converter from type");
+            throw new Exception(THROW_MESSAGE);
         }
 
         /// <summary>
@@ -39,17 +43,18 @@ namespace ConsoleInteractive.InputConverter
             if ((provider ?? StringConverterProvider.Global)
                 .TryGetConverter(type, out var c1)) return c1;
 
-            var instance = Activator.CreateInstance(type);
-
-            if (instance is IStringConverter c2) return c2;
-            if (instance is IConvertible)
+            if (Implements(type, typeof(IStringConverter))) {
+                var instance = Activator.CreateInstance(type);
+                if (instance is IStringConverter c2) return c2;
+            } else if (Implements(type, typeof(IConvertible))) {
                 return new StringConverter(
                     type,
                     e => Convert.ToString(e),
                     e => Convert.ChangeType(e, type)
                 );
+            }   
 
-            throw new Exception("Can't create converter from type");
+            throw new Exception(THROW_MESSAGE);
         }
 
         /// <summary>
@@ -76,6 +81,17 @@ namespace ConsoleInteractive.InputConverter
                 e => throw ConvertException.From(type),
                 e => throw ConvertException.From(type)
             );
+        }
+
+        /// <summary>
+        /// Checks if source implements or extends target
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="Target"></param>
+        /// <returns></returns>
+        private static bool Implements(Type source, Type target) {
+            return source.GetInterfaces().Any(x => x.IsGenericType ? 
+                x.GetGenericTypeDefinition() == target : x == target);
         }
     }
 }

@@ -41,7 +41,7 @@ namespace ConsoleInteractive.InputValidation
         Task<(bool, string?)> ValidateInput(T input);
 
         /// <summary>
-        /// eturn a new collection that Merge multiple collections
+        /// Return a new collection that Merge multiple collections
         /// </summary>
         /// <param name="collection"></param>
         IValidatorCollection<T> MergeCollection(IValidatorCollection<T> collection);

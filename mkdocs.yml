@@ -3,10 +3,11 @@ repo_url: https://github.com/Davidblkx/ConsoleInteractive
 nav:
   - Home: index.md
   - ConsoleI: console-i.md
+  - Components:
+    - InputText: comps/input-text.md
+    - Custom: comps/custom.md
   - Advanced:
-    - Validation: validation.md
-    - Conversion: converter.md
+    - Validation: adv/validation.md
+    - Conversion: adv/converter.md
 theme:
   name: mkdocs
-extra_css:
-  - extra-styles.css
