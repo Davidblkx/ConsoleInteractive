@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
-using ConsoleInteractive.Selection;
-using System.Linq;
+using ConsoleInteractive.Components;
 
 namespace ConsoleInteractive.Demo
 {
@@ -19,37 +18,37 @@ namespace ConsoleInteractive.Demo
             return cmd;
         }
 
-        private static void StartDemo() {
+        private static async void StartDemo() {
             const string NAME = "#BUFFER_SELECTION123#";
             ConsoleBuffer.MemoriseBufferPosition(NAME);
 
             Console.WriteLine("Select 1 option");
-            var options = new SelectionGroup<TestClass>()
-                .Add(new TestClass { Name = "option1" })
-                .Add(new TestClass { Name = "option2" })
-                .Add(new TestClass { Name = "option3" })
-                .Add(new TestClass { Name = "option4" });
+            var selection = InputSelection.From<TestClass>()
+                .AddOption(new TestClass { Name = "option1" })
+                .AddOption(new TestClass { Name = "option2" })
+                .AddOption(new TestClass { Name = "option3" })
+                .AddOption(new TestClass { Name = "option4" });
 
-            var result1 = ConsoleI.Select(options);
+            var result1 = await selection.RequestInput();
             Console.WriteLine($"Selected => {result1}");
             ConsoleI.AwaitContinue();
             ConsoleBuffer.ClearBufferFrom(NAME);
 
             Console.WriteLine("Select 1 to 5 options");
-            var options2 = new SelectionGroup<TestClass>()
-                .Add(new TestClass { Name = "option1" })
-                .Add(new TestClass { Name = "option2" })
-                .Add(new TestClass { Name = "option3" })
-                .Add(new TestClass { Name = "option4" })
-                .Add(new TestClass { Name = "option5" })
-                .Add(new TestClass { Name = "option6" })
-                .Add(new TestClass { Name = "option7" })
-                .Add(new TestClass { Name = "option8" })
-                .Add(new TestClass { Name = "option9" })
-                .Add(new TestClass { Name = "option10" })
-                .Add(new TestClass { Name = "option11" });
+            var selection2 = InputSelection.From<TestClass>()
+                .AddOption(new TestClass { Name = "option1" })
+                .AddOption(new TestClass { Name = "option2" })
+                .AddOption(new TestClass { Name = "option3" })
+                .AddOption(new TestClass { Name = "option4" })
+                .AddOption(new TestClass { Name = "option5" })
+                .AddOption(new TestClass { Name = "option6" })
+                .AddOption(new TestClass { Name = "option7" })
+                .AddOption(new TestClass { Name = "option8" })
+                .AddOption(new TestClass { Name = "option9" })
+                .AddOption(new TestClass { Name = "option10" })
+                .AddOption(new TestClass { Name = "option11" });
 
-            var result2 = ConsoleI.Select(options2, 5);
+            var result2 = await selection2.RequestInput();
             foreach(var r in result2) {
                 Console.WriteLine($"Selected => {r}");
             }
@@ -57,7 +56,9 @@ namespace ConsoleInteractive.Demo
             ConsoleBuffer.ClearBufferFrom(NAME);
 
             Console.WriteLine("Also works with ENUM");
-            var result3 = ConsoleI.Select<EnumTest>(3);
+            var result3 = await InputSelection
+                .FromEnum<EnumTest>()
+                .RequestInput();
             foreach(var r in result3) {
                 Console.WriteLine($"Selected => {(int)r}");
             }

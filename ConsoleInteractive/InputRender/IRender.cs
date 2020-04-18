@@ -8,6 +8,12 @@ namespace ConsoleInteractive.InputRender
     public interface IRender
     {
         /// <summary>
+        /// Message to show before request input
+        /// </summary>
+        /// <value></value>
+        string Message { get; set; }
+
+        /// <summary>
         /// Render data and request input
         /// </summary>
         /// <returns></returns>

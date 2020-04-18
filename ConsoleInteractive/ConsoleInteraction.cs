@@ -1,15 +1,15 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 using System;
-using ConsoleInteractive.Selection;
-using System.Collections.Generic;
+using ConsoleInteractive.Components;
 
 namespace ConsoleInteractive
 {
     public static class ConsoleI
     {
         /// <summary>
-        /// Ask for confirmation, user must press 1 of the keys
+        /// Ask for confirmation, user must press one of the keys
         /// </summary>
         /// <param name="message"></param>
         /// <param name="okKey"></param>
@@ -31,13 +31,28 @@ namespace ConsoleInteractive
         }
 
         /// <summary>
+        /// Show message, request for input and use the default validator store to validate result
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="defaultValue"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static Task<T> Ask<T>(string message, T defaultValue = default) {
+            return InputText.Create<T>(message, defaultValue)
+                .RequestInput();
+        }
+
+        /// <summary>
         /// Select item from a group of options
         /// </summary>
         /// <param name="group">collection of options</param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static T Select<T>(SelectionGroup<T> group) {
-            return SelectionGroup.Select(group, 1).First();
+        public static async Task<T> Select<T>(IEnumerable<T> options) {
+            return (await InputSelection.From<T>()
+                .AddOption(options)
+                .RequestInput()
+            ).First();
         }
 
         /// <summary>
@@ -47,8 +62,11 @@ namespace ConsoleInteractive
         /// <param name="max">max allowed selections</param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static IEnumerable<T> Select<T>(SelectionGroup<T> group, int max) {
-            return SelectionGroup.Select(group, max);
+        public static Task<IEnumerable<T>> Select<T>(IEnumerable<T> options, int max) {
+            return InputSelection.From<T>()
+                .SetMaxSelected(max)
+                .AddOption(options)
+                .RequestInput();
         }
 
         /// <summary>
@@ -56,8 +74,12 @@ namespace ConsoleInteractive
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static T Select<T>() where T : Enum {
-            return SelectionGroup.Select(SelectionGroup.FromEnum<T>()).First();
+        public static async Task<T> Select<T>() where T : Enum {
+            return (
+                await InputSelection
+                    .FromEnum<T>()
+                    .RequestInput()
+            ).First();
         }
 
         /// <summary>
@@ -65,8 +87,13 @@ namespace ConsoleInteractive
         /// </summary>
         /// <param name="max">max allowed selections</param>
         /// <returns></returns>
-        public static IEnumerable<T> Select<T>(int max) where T : struct, Enum {
-            return SelectionGroup.Select(SelectionGroup.FromEnum<T>(), max);
+        public static Task<IEnumerable<T>> Select<T>(int max) where T : struct, Enum {
+            return (
+                InputSelection
+                    .FromEnum<T>()
+                    .SetMaxSelected(max)
+                    .RequestInput()
+            );
         }
 
         /// <summary>
@@ -77,6 +104,13 @@ namespace ConsoleInteractive
             var m = message ?? "Press [RETURN] to continue...";
             Console.WriteLine(m);
             Console.ReadKey();
+        }
+
+        /// <summary>
+        /// Register components for primitives in global provider
+        /// </summary>
+        public static void RegisterDefaultComponents() {
+            DefaultRenderProviders.Register();
         }
     }
 }

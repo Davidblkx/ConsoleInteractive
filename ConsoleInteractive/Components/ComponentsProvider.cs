@@ -4,6 +4,9 @@ using ConsoleInteractive.InputRender;
 
 namespace ConsoleInteractive.Components
 {
+    /// <summary>
+    /// Provide components based on name or key
+    /// </summary>
     public class ComponentsProvider
     {
         private readonly Dictionary<string, IRender> _items
