@@ -34,6 +34,11 @@ namespace ConsoleInteractive.InputValidation
             return this;
         }
 
+        public ValidatorCollection<T> AddRange(params Validator<T>[] list) {
+            _items.AddRange(list.ToList());
+            return this;
+        }
+
         public ValidatorCollection<T> AddRange(IEnumerable<Validator<T>> fnList) {
             _items.AddRange(fnList);
             return this;

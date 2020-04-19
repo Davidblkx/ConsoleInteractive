@@ -48,6 +48,6 @@ namespace ConsoleInteractive.Components
         /// Default render
         /// </summary>
         /// <returns></returns>
-        public static ComponentsProvider Global => new ComponentsProvider();
+        public static readonly ComponentsProvider Global = new ComponentsProvider();
     }
 }

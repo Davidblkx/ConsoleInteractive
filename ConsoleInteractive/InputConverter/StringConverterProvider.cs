@@ -81,7 +81,7 @@ namespace ConsoleInteractive.InputConverter
             throw ConvertException.From(type);
         }
 
-        public static StringConverterProvider Global =
+        public static readonly StringConverterProvider Global =
             new StringConverterProvider();
     }
 }

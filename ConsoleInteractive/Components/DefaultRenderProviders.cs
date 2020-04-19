@@ -12,6 +12,8 @@ namespace ConsoleInteractive.Components
             Register(0.0);
             Register(0.0f);
             Register(0.0d);
+            Register<uint>(0);
+            Register<ulong>(0);
         }
 
         private static void Register<T>(T defaultValue) {

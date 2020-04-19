@@ -11,7 +11,7 @@
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/ConsoleInteractive.Demo/bin/Debug/netcoreapp3.1/ConsoleInteractive.Demo.dll",
-            "args": ["s"],
+            "args": ["f"],
             "cwd": "${workspaceFolder}/ConsoleInteractive.Demo",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "integratedTerminal",

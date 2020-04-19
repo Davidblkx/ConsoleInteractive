@@ -1,3 +1,4 @@
+using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.CommandLine;
@@ -30,12 +31,13 @@ namespace ConsoleInteractive.Demo
                 .AddOption(new TestClass { Name = "option4" });
 
             var result1 = await selection.RequestInput();
-            Console.WriteLine($"Selected => {result1}");
+            Console.WriteLine($"Selected => {result1.First()}");
             ConsoleI.AwaitContinue();
             ConsoleBuffer.ClearBufferFrom(NAME);
 
             Console.WriteLine("Select 1 to 5 options");
             var selection2 = InputSelection.From<TestClass>()
+                .SetMaxSelected(5)
                 .AddOption(new TestClass { Name = "option1" })
                 .AddOption(new TestClass { Name = "option2" })
                 .AddOption(new TestClass { Name = "option3" })

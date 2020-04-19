@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using ConsoleInteractive.InputValidation;
 
 namespace ConsoleInteractive.InputRender
 {
@@ -18,6 +19,12 @@ namespace ConsoleInteractive.InputRender
         /// </summary>
         /// <returns></returns>
         Task<object?> RequestInput();
+
+        /// <summary>
+        /// Set validators for this component
+        /// </summary>
+        /// <param name="validators"></param>
+        void SetValidator(IValidatorCollection validators);
     }
 
     /// <summary>

@@ -33,11 +33,9 @@ namespace ConsoleInteractive.Components
         /// <value></value>
         public char CaretChar { get; set; } = '>';
 
-        /// <summary>
-        /// Message to show before requesting input
-        /// </summary>
-        /// <value></value>
-        public string Message { get; set; } = "Select an option";
+        public InputSelection() {
+            Message = "Select an option";
+        }
         
         /// <summary>
         /// Add options to current list
@@ -196,11 +194,20 @@ namespace ConsoleInteractive.Components
         /// <param name="row">current postion</param>
         /// <returns></returns>
         private (int startAt, int row) MoveCaret(int step, int startAt, int row) {
-            var lastRow = CalculateLastOptionToRender(startAt) - 1; // base 0
+            var lastRow = _options.Count > MaxItemsToRender ? 
+                MaxItemsToRender-1 : 
+                _options.Count-1;
+
             row+=step;
-            if (row < 0) row = 0;
-            if (row > lastRow) row = lastRow;
-            return (CalculateStartAt(startAt+step), row);
+            if (row > lastRow) {
+                row = lastRow;
+                startAt = CalculateStartAt(startAt+step);
+            }
+            if (row < 0) {
+                row = 0;
+                startAt = CalculateStartAt(startAt+step);
+            }
+            return (startAt, row);
         }
 
         /// <summary>
@@ -228,7 +235,7 @@ namespace ConsoleInteractive.Components
             int renderUntil = CalculateLastOptionToRender(startAt);
             
             for(var i = startAt; i < renderUntil; i++) {
-                var caret = GetCursorForPosition(startAt - i, row);
+                var caret = GetCursorForPosition(i - startAt, row);
                 var isSelected = selected.Contains(i) ? "(*)" : "( )";
 
                 Console.WriteLine($"{caret}{isSelected} {_options[i].Text}");

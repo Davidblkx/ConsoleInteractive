@@ -82,7 +82,7 @@ namespace ConsoleInteractive.InputValidation
         /// <summary>
         /// Get collection for name, if no collection is found, 
         /// a empty one is returned.null If cant cast to type, an 
-        /// Exception is raized
+        /// Exception is raised
         /// </summary>
         /// <param name="name"></param>
         /// <typeparam name="TTarget"></typeparam>

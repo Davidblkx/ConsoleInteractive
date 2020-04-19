@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using ConsoleInteractive.InputConverter;
 using ConsoleInteractive.InputValidation;
@@ -24,6 +25,8 @@ namespace ConsoleInteractive.InputRender
         public IValidatorCollection<T> Validators { get; set; }
             = new ValidatorCollection<T>();
 
+        public string Message { get; set; } = "";
+
         /// <summary>
         /// Method to render and request data
         /// </summary>
@@ -37,6 +40,12 @@ namespace ConsoleInteractive.InputRender
         /// <returns></returns>
         protected IStringConverter<T> GetConverter() {
             return StringConverterFactory.Create<T>(ConverterProvider);
+        }
+
+        public void SetValidator(IValidatorCollection validators)
+        {
+            Validators = new ValidatorCollection<T>()
+                .AddRange(validators.Cast<IValidator<T>>());
         }
     }
 }

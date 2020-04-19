@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System;
 using ConsoleInteractive.Components;
+using ConsoleInteractive.Form;
 
 namespace ConsoleInteractive
 {
@@ -28,6 +29,17 @@ namespace ConsoleInteractive
                 if (key.Key == koKey) { return false; }
                 ConsoleBuffer.ClearBufferFrom(BUFFER_KEY);
             } while(true);
+        }
+
+        /// <summary>
+        /// Render form for type
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static Task<T> RenderForm<T>() where T : new() {
+            return ConsoleForm
+                .BuildForm<T>()
+                .Request();
         }
 
         /// <summary>
@@ -107,9 +119,9 @@ namespace ConsoleInteractive
         }
 
         /// <summary>
-        /// Register components for primitives in global provider
+        /// Register defaults for global providers
         /// </summary>
-        public static void RegisterDefaultComponents() {
+        public static void RegisterDefaults() {
             DefaultRenderProviders.Register();
         }
     }

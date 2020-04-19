@@ -52,7 +52,7 @@ namespace ConsoleInteractive.InputConverter
                     e => Convert.ToString(e),
                     e => Convert.ChangeType(e, type)
                 );
-            }   
+            }
 
             throw new Exception(THROW_MESSAGE);
         }

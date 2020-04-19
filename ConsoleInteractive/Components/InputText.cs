@@ -15,12 +15,6 @@ namespace ConsoleInteractive.Components
         public Type Target => typeof(T);
 
         /// <summary>
-        /// Message to show before requesting input
-        /// </summary>
-        /// <value></value>
-        public string Message { get; set; }
-
-        /// <summary>
         /// Default value to use if no input
         /// </summary>
         /// <value></value>
