@@ -4,6 +4,8 @@ using System.Linq;
 using System;
 using ConsoleInteractive.Components;
 using ConsoleInteractive.Form;
+using ConsoleInteractive.InputValidation;
+using ConsoleInteractive.InputConverter;
 
 namespace ConsoleInteractive
 {
@@ -49,8 +51,9 @@ namespace ConsoleInteractive
         /// <param name="defaultValue"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static Task<T> Ask<T>(string message, T defaultValue = default) {
-            return InputText.Create<T>(message, defaultValue)
+        public static Task<T> Ask<T>(string message, T defaultValue = default, IValidatorCollection<T>? validators = null, StringConverterProvider? provider = null) {
+            return InputText.Create<T>(
+                message, defaultValue, validators, provider)
                 .RequestInput();
         }
 
@@ -99,7 +102,7 @@ namespace ConsoleInteractive
         /// </summary>
         /// <param name="max">max allowed selections</param>
         /// <returns></returns>
-        public static Task<IEnumerable<T>> Select<T>(int max) where T : struct, Enum {
+        public static Task<IEnumerable<T>> Select<T>(int max) where T : Enum {
             return (
                 InputSelection
                     .FromEnum<T>()

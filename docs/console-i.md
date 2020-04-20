@@ -6,106 +6,109 @@ ConsoleI is the principal object for all input request
 ___
 # Methods
 ___
-## AskQuestion
-*Question with free text input*
-
-![question](img/question.PNG)
-
-__Signature:__
-```C#
-Task<T> AskQuestion<T>(string questionMessage, T defaultValue, IQuestionValidators<T> validators )
-```
-__Details:__
-
- - Allow to request input using free text, A default value can be passed.
- - It's possible to pass a collection of validators, that will force the user to input a expected value
-
- - To load all the default question providers you should run: 
-`QuestionFactoryProvider.RegisterDefaultProviders();`
-
- - It's also possible to register custom providers by using:
-`QuestionFactoryProvider.RegisterQuestionFormat<T>(BaseQuestion<T> question)`
-
-__Read more at:__
-
- - [BaseQuestion](/question/base-question/)
- - [QuestionFactory](/question/question-factory/)
- - [QuestionFactoryProvider](/question/question-factory-provider/)
-___
-## Select
-*Force use to select from a predefined list*
-
-![selection](img/selection.PNG)
-
-__Signature:__
-```C#
-IEnumerable<T> Select<T>(SelectionGroup<T> group, int max);
-T Select<T>() where T : Enum
-```
-
-__Details:__
-
- - User can select 1 to multiple options
- - Works if `Enum` by default
- - If the list is too big will scroll values
- - Allow to use any Type by using `SelectionOption<T>`
-
-__Read more at:__
-
- - [SelectionOption](selection/selection-option.md)
- - [SelectionGroup](selection/selection-group.md)
-___
 ## AskConfirmation
-*User can only select Yes or No*
+*User must press key to accept of reject*
 
-![confirmation](img/confirmation.PNG)
+![gif](../gifs/c-ask.gif)
 
 __Signature:__
 ```C#
 bool AskConfirmation(string message, ConsoleKey okKey = ConsoleKey.Y, ConsoleKey koKey = ConsoleKey.N)
 ```
 
+__Params:__
+
+ - *message* -> message to show as question
+ - *okKey*   -> `ConsoleKey` to use as `true`
+ - *koKey*   -> `ConsoleKey` to use as `false`
+
 __Details:__
 
- - Only accepts 2 specific keys
- - returns bool
-___
-## AwaitContinue
-*Pauses until user press [RETURN]*
+ - User must press one of two keys to continue, one returns `true`, other `false`
+ - By default keys are `Y` -> true, `N` -> false
 
-![await](img/await.PNG)
+---
 
-__Signature:__
-```C#
-void AwaitContinue(string? message = default)
-```
-___
-## RequestForm
-*Create object from a list of questions*
+## Ask
+*Receives text input from console and converts to type*
 
-__Using:__
-```C#
-using ConsoleInteractive.Forms;
-
-public class UserCV {
-    [FormField("What is your name")]
-    public string Name { get; set; }
-    [FormField("What is your age", 30)]
-    public int Age { get; set; }
-    [FormField("Can list your work titles (separate by ';')")]
-    public List<string> WorkTitles { get; set; }
-
-    public override string ToString() {
-        return $"{Name} ({Age}) => {string.Join(';', WorkTitles)}";
-    }
-}
-
-var result = await ConsoleI.RequestForm<UserCV>();
-Console.WriteLine(result); // UserCV object
-```
-![form](img/form.PNG)
+![gif](../gifs/input-text.gif)
 
 __Signature:__
 ```C#
-Task<T> RequestForm<T>() where T : class, new()
+Task<T> Ask<T>(string message, T defaultValue = default, IValidatorCollection<T>? validators = null, StringConverterProvider? provider = null)
 ```
+
+__Params:__
+
+ - *message*      -> message to show before request input
+ - *defaultValue* -> value to use as default if no input
+ - *validators*   -> input [validators](/adv/validation/)
+ - *provider*   -> input [converter provider](/adv/converter/)
+
+__Details:__
+
+ - Allow to request input using free text, A default value can be passed.
+ - You can pass a collection of validators, that will force the user to input a expected value
+ - You can pass a custom converter provider to convert result
+
+__Read more at:__
+
+ - [InputText](/comps/input-text/)
+ - [Validators](/adv/validation/)
+ - [Converters](/adv/converter/)
+___
+
+## Select
+*User must select from a list of values*
+
+![gif](../gifs/input-select.gif)
+
+__Signature:__
+```C#
+// select one
+Task<T> Select<T>(IEnumerable<T> options);
+// select one or more
+Task<IEnumerable<T>> Select<T>(IEnumerable<T> options, int max);
+// select one from enum type
+Task<T> Select<T>() where T : Enum;
+// select one or more from enum type
+Task<IEnumerable<T>> Select<T>(int max) where T : Enum;
+```
+
+__Params:__
+
+ - *options* -> collection of options to show
+ - *max* -> max number of selected options allowed
+
+__Details:__
+
+ - User must always select at least one option
+ - You can pass a collection of validators, that will force the user to input a expected value
+ - You can pass a custom converter provider to convert result
+
+__Read more at:__
+
+ - [InputSelect](/comps/input-sel/)
+ - [Validators](/adv/validation/)
+ - [Converters](/adv/converter/)
+___
+
+## Form
+*Build object from multi questions, using `FormEntry` attribute*
+
+![gif](../gifs/input-form.gif)
+
+__Signature:__
+```C#
+Task<T> RenderForm<T>() where T : new()
+```
+
+__Details:__
+
+ - T must have properties with attribute `FormEntry`
+
+__Read more at:__
+
+ - [Form](/adv/forms/)
+___

@@ -5,9 +5,11 @@ nav:
   - ConsoleI: console-i.md
   - Components:
     - InputText: comps/input-text.md
+    - InputSelect: comps/input-sel.md
     - Custom: comps/custom.md
   - Advanced:
     - Validation: adv/validation.md
     - Conversion: adv/converter.md
+    - Forms: adv/forms.md
 theme:
   name: mkdocs
