@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Validation - Console Interactive</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">Console Interactive</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../.." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../console-i/" class="nav-link">ConsoleI</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Components <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../comps/input-text/" class="dropdown-item">InputText</a>
+</li>
+                                    
+<li>
+    <a href="../../comps/input-sel/" class="dropdown-item">InputSelect</a>
+</li>
+                                    
+<li>
+    <a href="../../comps/custom/" class="dropdown-item">Custom</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Advanced <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="./" class="dropdown-item active">Validation</a>
+</li>
+                                    
+<li>
+    <a href="../converter/" class="dropdown-item">Conversion</a>
+</li>
+                                    
+<li>
+    <a href="../forms/" class="dropdown-item">Forms</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../../comps/custom/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../converter/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/Davidblkx/ConsoleInteractive/edit/master/docs/adv/validation.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#validation" class="nav-link">Validation</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#1-about" class="nav-link">1. About</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#2-validatort" class="nav-link">2. Validator&lt;T></a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#3-exceptions" class="nav-link">3. Exceptions</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#4-collection" class="nav-link">4. Collection</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#5-validatorprovider" class="nav-link">5. ValidatorProvider</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="validation">Validation</h1>
+<hr />
+<h2 id="1-about">1. About</h2>
+<p>In order to validate user input, you need to create validators. Validators are 
+lambdas that return a boolean with a success status and a message of the 
+reason to fail.
+They could be represent by: </p>
+<pre><code class="C#">(T e) =&gt; (bool, string?)
+</code></pre>
+
+<hr />
+<h2 id="2-validatort">2. Validator&lt;T></h2>
+<p>In order to allow Generics usage and more flexibility, validators are build from
+the class <code>Validator&lt;T&gt;</code>. And by default all validators are treated as a <code>Task</code>.</p>
+<p>A validator that check if the user inputted an empty text, could be written as:</p>
+<pre><code class="C#">var validator = new Validator&lt;string&gt;(e =&gt; (!string.IsNullOrEmpty(e), &quot;Can't be empty&quot;))
+</code></pre>
+
+<p>Async validators are also accepted, actually all validators are treated as async. An async 
+validator could be written as:</p>
+<pre><code class="C#">var validator = new Validator&lt;string&gt;(async e =&gt; (await LongCall(e), &quot;LongCall failed to validate input&quot;))
+</code></pre>
+
+<hr />
+<h2 id="3-exceptions">3. Exceptions</h2>
+<p>Sometimes returning a message for each error in a long validator could be 
+laborious, so it's possible to write a method that report errors by throwing
+an <code>Exception</code> with a custom message. By default all exception are handled, but
+if the Exception <code>ValidatorException</code> is thrown the full message is shown 
+instead of a default one.</p>
+<p>Example output:</p>
+<ul>
+<li><code>throw new Exception("Invalid length")</code> =&gt; "Error validating input: Invalid Length"</li>
+<li><code>throw new ValidatorException("Invalid length")</code> =&gt; "Invalid Length"</li>
+</ul>
+<hr />
+<h2 id="4-collection">4. Collection</h2>
+<p>The best way to represent a series of validations is using the <code>ValidatorCollection&lt;T&gt;</code>, 
+it allows to aggregate multiple validators and when validates an Input it keeps the 
+insert order.</p>
+<p>Collections are also the main way to run a validation, which mean that
+most interaction is done through this object.</p>
+<p>An example of a collection that could check an input password:</p>
+<pre><code class="C#">var validators = ValidatorCollection
+    .Create&lt;string&gt;()
+    .Add(e =&gt; (e.Length &gt;= 8, &quot;Length must be at least 8&quot;))
+    .Add(e =&gt; (e.Length &lt; 64, &quot;Length must be less than 64&quot;))
+    .Add(async e =&gt; (await CheckPwnedPassword(e), &quot;Password has appear in a data breach&quot;));
+
+var (valid, errorMessage) = validators.ValidateInput(password);
+</code></pre>
+
+<hr />
+<h2 id="5-validatorprovider">5. ValidatorProvider</h2>
+<p>A <code>ValidatorProvider</code> is a way to reference a <code>ValidatorCollection&lt;T&gt;</code> by name, 
+which allow to call validation for an input without even knowing the type.
+It also allow to use <code>Enum</code> as a name and <code>Flags</code> to aggregate multiple 
+collection. Every time a provider is required and none is available, the
+default <code>ValidatorProvider.Global</code> is used.</p>
+<p><strong>Register a collection and validate inputs:</strong></p>
+<pre><code class="C#">var validators = ValidatorCollection
+    .Create&lt;string&gt;()
+    .Add(e =&gt; (e.Length &gt;= 8, &quot;Length must be at least 8&quot;))
+    .Add(e =&gt; (e.Length &lt; 64, &quot;Length must be less than 64&quot;))
+    .Add(async e =&gt; (await CheckPwnedPassword(e), &quot;Password has appear in a data breach&quot;));
+
+ValidatorProvider.Global.Register&lt;string&gt;(&quot;PASSWORD&quot;, validators);
+
+// It can be used in any moment by
+var (valid, errorMessage) = await ValidatorProvider.Global.Validate(&quot;PASSWORD&quot;, password);
+</code></pre>
+
+<p><strong>Using Enums:</strong></p>
+<pre><code class="C#">[Flags]
+enum StringValidator {
+    NotEmpty = 1,
+    MinLength3 = 2,
+    MinLength7 = 4,
+    Lowercase = 8,
+}
+
+ValidatorProvider.Global.Register(
+    StringValidator.NotEmpty,
+    ValidatorCollection.Create&lt;string&gt;()
+        .Add(e =&gt; (!string.IsNullOrEmpty(e), &quot;Can't be empty&quot;)));
+
+ValidatorProvider.Global.Register(
+    StringValidator.MinLength3,
+    ValidatorCollection.Create&lt;string&gt;()
+        .Add(e =&gt; (e.Length &gt;= 3, &quot;Length must be at least 3&quot;)));
+
+ValidatorProvider.Global.Register(
+    StringValidator.MinLength7,
+    ValidatorCollection.Create&lt;string&gt;()
+        .Add(e =&gt; (e.Length &gt;= 7, &quot;Length must be at least 7&quot;)));
+
+ValidatorProvider.Global.Register(
+    StringValidator.Lowercase,
+    ValidatorCollection.Create&lt;string&gt;()
+        .Add(e =&gt; (e == e.ToLower(), &quot;Must be in lowercase&quot;)));
+
+var validator = StringValidator.MinLength7 | StringValidator.Lowercase;
+
+// Check that input has min length 7 and is in lowercase
+var (valid, errorMessage) = await ValidatorProvider.Global.Validate(validator, input);
+</code></pre></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
