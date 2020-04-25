@@ -65,9 +65,16 @@ namespace ConsoleInteractive.Components
         }
 
         private string BuildMessage() {
-            var converter = GetConverter();
-            var defaultVal = DefaultValue is null ? "" : $"({converter.ToString(DefaultValue)})";
+            var defaultVal = GetDefaultValueString();
+            if (!string.IsNullOrEmpty(defaultVal))
+                defaultVal = $"({defaultVal})";
             return $"{Message} {defaultVal}";
+        }
+
+        private string GetDefaultValueString() {
+            if (DefaultValue is null) return "";
+            var converter = GetConverter();
+            return converter.ToString(DefaultValue);
         }
 
         public static InputText<T> Create(

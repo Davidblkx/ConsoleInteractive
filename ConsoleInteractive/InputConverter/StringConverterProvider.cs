@@ -38,7 +38,7 @@ namespace ConsoleInteractive.InputConverter
         /// <typeparam name="T"></typeparam>
         /// <returns>true if found</returns>
         public bool TryGetConverter<T>(out IStringConverter<T> converter) {
-            var type = typeof(Type);
+            var type = typeof(T);
             if (_items.ContainsKey(type) && _items[type] is IStringConverter<T> c){
                 converter = c;
                 return true;

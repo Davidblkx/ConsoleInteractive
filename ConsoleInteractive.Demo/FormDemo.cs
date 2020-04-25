@@ -4,6 +4,7 @@ using System.CommandLine.Invocation;
 using System.Threading.Tasks;
 using ConsoleInteractive.Components;
 using ConsoleInteractive.Form;
+using ConsoleInteractive.InputConverter;
 using ConsoleInteractive.InputValidation;
 
 namespace ConsoleInteractive.Demo
@@ -33,6 +34,7 @@ namespace ConsoleInteractive.Demo
         public const string REQUIRED = "TEXT_REQUIRED";
         public const string AGE_INTERVAL = "AGE_INTERVAL";
         public const string WORK_TITLES_COMPONENT = "WORK_TITLES_ENUM_COMPONENT";
+        public const string URL_COMPONENT = "URL_COMPONENT";
 
         public TestFormClass() {
             ValidatorProvider.Global.Register(REQUIRED, ValidatorCollection
@@ -42,8 +44,14 @@ namespace ConsoleInteractive.Demo
                     .Add(n => (n >= 13, "Age must be older than 13"))
                     .Add(n => (n <= 150, "Age must be younger then 150"))
             );
+
+            StringConverterProvider.Global.Register(new UriConverter());
+
             ComponentsProvider.Global.Register(WORK_TITLES_COMPONENT, 
                 InputSelection.FromEnum<WorkTitles>());
+
+            ComponentsProvider.Global.Register(URL_COMPONENT, 
+                InputText.Create<Uri>("Url"));
         }
 
         [FormEntry(Priority = 0, Message = "Insert name", ValidatorsKey = REQUIRED)]
@@ -55,8 +63,11 @@ namespace ConsoleInteractive.Demo
         [FormEntry(Priority = 2, Message = "Select work", ProviderKey = WORK_TITLES_COMPONENT)]
         public WorkTitles WorkTitle { get; set; }
 
+        [FormEntry(Priority = 2, Message = "Url", ProviderKey = URL_COMPONENT)]
+        public Uri ServerUrl { get; set; }
+
         public override string ToString() {
-            return $"{Name} ({Age}) => {string.Join(';', WorkTitle.ToString())}";
+            return $"[{ServerUrl}] {Name} ({Age}) => {string.Join(';', WorkTitle.ToString())}";
         }
     }
 
@@ -69,5 +80,19 @@ namespace ConsoleInteractive.Demo
         Carpenter,
         Mason,
         ItSupport
+    }
+
+    public class UriConverter : StringConverter<Uri>
+    {
+        public UriConverter() : base(UriToString, StringToUri) {}
+
+        public static string UriToString(Uri u) => u?.ToString() ?? "";
+        public static Uri StringToUri(string s) {
+            if (Uri.IsWellFormedUriString(s, UriKind.Absolute)) {
+                return new Uri(s);
+            }
+
+            throw new ConvertStringFormatException("Url is invalid, should match [http://]");
+        }
     }
 }
